@@ -1,0 +1,29 @@
+activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (video.isSelected()) {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        videoPath = result.getData().getData();
+                        Log.i("VIDEO_RECORD_TAG", "Video is recorded and available at path " + videoPath);
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Log.i("VIDEO_RECORD_TAG", "Recording video is cancelled ");
+                    } else {
+                        Log.i("VIDEO_RECORD_TAG", "Recording video has got some error ");
+                    }
+                }
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        imagePath = result.getData().getData();
+                        Intent pintent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        File f = new File(String.valueOf(imagePath));
+                        Uri picUri = Uri.fromFile(f);
+                        pintent.setData(picUri);
+                        sendBroadcast(pintent);
+                        Log.i("IMAGE_TAG", "Image is captures and available at path " + imagePath);
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Log.i("IMAGE_TAG", "Capturing image is cancelled ");
+                    } else {
+                        Log.i("IMAGE_TAG", "Capturing image has got some error ");
+                    }
+                }
+
+        });
